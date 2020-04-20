@@ -1,6 +1,6 @@
 FROM node:alpine
 
-LABEL maintainer "allan.duee@yncrea.fr"
+LABEL maintainer "eric.muellenbach@yncrea.fr"
 
 ADD 
 CloudAwarenessLab/app.js .
