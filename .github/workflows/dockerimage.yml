@@ -22,5 +22,6 @@ jobs:
         password: ${{ secrets.DOCKER_PASSWORD }}
         repository: ${{ secrets.DOCKER_USERNAME }}/dockerScc
         tag_with_sha: true
+        dockerfile: CloudAwarenessLab/Dockerfile
     - name: Push the Docker image
       run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
