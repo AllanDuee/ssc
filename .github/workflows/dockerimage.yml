@@ -74,7 +74,7 @@ jobs:
     - name: deploy-to-k8s
       run: |
         aws eks update-kubeconfig --name isen
-        kubectl kustomize . | kubectl apply -f -
+        kubectl CloudAwarenessLab/kustomize . | kubectl apply -f -
         
     - name: deploy-to-aws
       run: |
