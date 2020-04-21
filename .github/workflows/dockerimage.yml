@@ -55,6 +55,13 @@ jobs:
         # path: # optional, default is .
         # Path to the Dockerfile (Default is '{path}/Dockerfile')
         dockerfile: CloudAwarenessLab/Dockerfile
+
+    - name: prepare-kustomize
+      run: |
+        sed -i "s#IMAGE_NAME#allanduee/ssc#g" kustomization.yaml
+        sed -i "s/IMAGE_TAG/sha-$(git rev-parse --short HEAD)/g" kustomization.yaml
+        cat kustomization.yaml
+        
     - name: deploy-to-aws
       run: |
         aws configure set default.region us-east-1
@@ -63,8 +70,14 @@ jobs:
         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws configure set aws_session_token ${{ secrets.AWS_SESSION_TOKEN }}
         aws cloudformation deploy --template-file CloudAwarenessLab/cloudformation.yaml --stack-name allandueeGitHub-stack --no-fail-on-empty-changeset 
-        aws cloudformation deploy --template-file CloudAwarenessLab/ecs-task.yaml --stack-name ecs-task --parameter-overrides ImageName=docker.io/allanduee/ssc:sha-$(git rev-parse --short HEAD) --no-fail-on-empty-changeset
-        sed -i "s#IMAGE_NAME#<allanduee>#g" CloudAwarenessLab/kustomization.yaml
-        sed -i "s/IMAGE_TAG/sha-$(git rev-parse --short HEAD)/g" CloudAwarenessLab/kustomization.yaml
+        
+    - name: deploy-to-k8s
+      if: github.ref == 'refs/heads/deploy-to-k8s'
+      run: |
         aws eks update-kubeconfig --name isen
         kubectl kustomize . | kubectl apply -f -
+        
+    - name: deploy-to-aws
+      if: github.ref == 'refs/heads/master'
+      run: |
+        aws cloudformation deploy --template-file CloudAwarenessLab/ecs-task.yaml --stack-name ecs-task --parameter-overrides ImageName=docker.io/allanduee/ssc:sha-$(git rev-parse --short HEAD) --no-fail-on-empty-changeset
