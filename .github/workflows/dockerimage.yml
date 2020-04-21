@@ -42,7 +42,7 @@ jobs:
         # Password or personal access token used to log in to a Docker registry. If not set then no login will occur
         password: ${{ secrets.DOCKER_PASSWORD }}
         # Server address of Docker registry. If not set then will default to Docker Hub
-        # registry: # optional
+        # registry: # optional 
         # Docker repository to tag the image with
         repository: ${{ secrets.DOCKER_USERNAME }}/ssc
         # Comma-delimited list of tags. These will be added to the registry/repository to form the image's tags
@@ -58,11 +58,11 @@ jobs:
 
     - name: prepare-kustomize
       run: |
-        sed -i "s#IMAGE_NAME#allanduee/ssc#g" CloudAwarenessLab/kustomization.yaml
-        sed -i "s/IMAGE_TAG/sha-$(git rev-parse --short HEAD)/g" CloudAwarenessLab/kustomization.yaml
-        cat CloudAwarenessLab/kustomization.yaml
+        sed -i "s#IMAGE_NAME#allanduee/ssc#g" kustomization.yaml
+        sed -i "s/IMAGE_TAG/sha-$(git rev-parse --short HEAD)/g" kustomization.yaml
+        cat kustomization.yaml
         
-    - name: deploy-to-aws
+    - name: configure-aws
       run: |
         aws configure set default.region us-east-1
         aws configure set default.output json
@@ -74,7 +74,7 @@ jobs:
     - name: deploy-to-k8s
       run: |
         aws eks update-kubeconfig --name isen
-        kubectl CloudAwarenessLab/kustomize . | kubectl apply -f -
+        kubectl kustomize . | kubectl apply -f -
         
     - name: deploy-to-aws
       run: |
