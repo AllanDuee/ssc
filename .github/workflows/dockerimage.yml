@@ -23,7 +23,7 @@ jobs:
       
     - uses: minchao/cfn-nag-action@master
       with:
-        args: CloudAwarenessLab/cf-all.yaml
+        args: '--input-path CloudAwarenessLab/cf-all.yaml'
     # Runs a single command using the runners shell
     - name: Run a one-line script
       run: echo Hello, world!
