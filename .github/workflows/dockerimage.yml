@@ -20,9 +20,10 @@ jobs:
     steps:
     # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
     - uses: actions/checkout@v2
+      
     - uses: minchao/cfn-nag-action@master
       with:
-        args: '--input-path template.yaml'
+        args: CloudAwarenessLab/cf-all.yaml
     # Runs a single command using the runners shell
     - name: Run a one-line script
       run: echo Hello, world!
