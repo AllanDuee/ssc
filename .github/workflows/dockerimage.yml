@@ -62,7 +62,7 @@ jobs:
         sed -i "s/IMAGE_TAG/sha-$(git rev-parse --short HEAD)/g" kustomization.yaml
         cat kustomization.yaml
         
-    - name: deploy-to-aws
+    - name: configure-aws
       run: |
         aws configure set default.region us-east-1
         aws configure set default.output json
