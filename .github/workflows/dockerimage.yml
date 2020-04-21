@@ -72,12 +72,10 @@ jobs:
         aws cloudformation deploy --template-file CloudAwarenessLab/cloudformation.yaml --stack-name allandueeGitHub-stack --no-fail-on-empty-changeset 
         
     - name: deploy-to-k8s
-      if: github.ref == 'refs/heads/deploy-to-k8s'
       run: |
         aws eks update-kubeconfig --name isen
         kubectl kustomize . | kubectl apply -f -
         
     - name: deploy-to-aws
-      if: github.ref == 'refs/heads/master'
       run: |
         aws cloudformation deploy --template-file CloudAwarenessLab/ecs-task.yaml --stack-name ecs-task --parameter-overrides ImageName=docker.io/allanduee/ssc:sha-$(git rev-parse --short HEAD) --no-fail-on-empty-changeset
