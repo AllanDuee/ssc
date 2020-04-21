@@ -60,15 +60,3 @@ jobs:
         aws configure set aws_secret_access_key ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         aws configure set aws_session_token ${{ secrets.AWS_SESSION_TOKEN }}
         aws cloudformation deploy --template-file cloudformation.yaml --stack-name allandueeGitHub-stack --no-fail-on-empty-changeset 
-        # Sets the target stage to build
-        # target: # optional
-        # Always attempt to pull a newer version of the image
-        # always_pull: # optional
-        # Comma-delimited list of build-time variables
-        # build_args: # optional
-        # Comma-delimited list of labels to add to the built image
-        # labels: # optional
-        # Adds labels with git repository information to the built image
-        # add_git_labels: # optional
-        # Whether to push the image
-        # push: # optional, default is true
